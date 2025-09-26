@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FleTodo - Simple Todo List</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📝%3C/text%3E%3C/svg%3E">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📝%3C/text%3E%3C/svg%3E">
+    
+    <!-- Theme color -->
+    <meta name="theme-color" content="#0175C2">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <h1>📝 FleTodo</h1>
+            <p class="subtitle">A simple and elegant todo list</p>
+        </header>
+        
+        <main class="main-content">
+            <!-- Add todo section -->
+            <section class="add-todo-section">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="todoInput" 
+                        placeholder="Enter a new todo item..."
+                        class="todo-input"
+                        maxlength="200"
+                    >
+                    <button id="addBtn" class="add-btn">Add Todo</button>
+                </div>
+            </section>
+            
+            <hr class="divider">
+            
+            <!-- Todo list section -->
+            <section class="todo-list-section">
+                <h2>Your Todos:</h2>
+                <div id="todoList" class="todo-list">
+                    <div class="empty-state">
+                        <p>No todos yet. Add one above!</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="app-footer">
+            <p>Built with ❤️ using HTML, CSS & JavaScript</p>
+            <p class="storage-info">Data is saved in your browser's local storage</p>
+        </footer>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
