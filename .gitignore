@@ -205,3 +205,11 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Keep release directory but exclude large build artifacts that can be regenerated
+release/assets/
+release/main.dart.js
+release/flutter*.js
+release/python-worker.js
+release/.last_build_id
+release/version.json
