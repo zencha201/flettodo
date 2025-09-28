@@ -48,6 +48,38 @@ python main.py
 
 The application will open in your default web browser.
 
+## Building
+
+### Web SPA Build
+
+To create a deployable Single Page Application:
+
+```bash
+python build_spa.py
+```
+
+This creates a web version in the `docs/` directory that can be deployed to any static hosting service.
+
+### Windows Desktop Build
+
+To create a Windows desktop executable:
+
+```bash
+python build_windows.py
+```
+
+This creates a Windows application in the `bin/win/` directory with:
+- Standalone executable that doesn't require Python installation
+- Convenient batch script for easy launching
+- Complete documentation and usage instructions
+
+**Requirements for Windows builds:**
+- Python 3.7+
+- Flet framework (`flet>=0.21.0`)
+- PyInstaller (`pyinstaller>=6.0.0`)
+
+The Windows build uses PyInstaller to create a self-contained executable that includes all dependencies.
+
 ### Using the Todo List
 
 1. **Adding Todos**: Type your task in the input field and click "Add Todo" or press Enter
@@ -63,11 +95,17 @@ Your todos are automatically saved to your browser's localStorage and will persi
 
 ```
 flettodo/
-├── todo_app.py       # Main application with TodoApp class
-├── main.py           # Entry point script
-├── test_todo.py      # Test script for TodoItem functionality
-├── requirements.txt  # Python dependencies
-└── README.md         # This file
+├── todo_app.py           # Main application with TodoApp class
+├── main.py               # Entry point script
+├── test_todo.py          # Test script for TodoItem functionality
+├── build_spa.py          # Build script for web SPA deployment
+├── build_windows.py      # Build script for Windows desktop app
+├── create_standalone_spa.py  # Standalone HTML/CSS/JS version
+├── requirements.txt      # Python dependencies
+├── bin/                  # Build output directory
+│   └── win/             # Windows build artifacts
+├── docs/                # SPA build artifacts
+└── README.md            # This file
 ```
 
 ## Technical Details
