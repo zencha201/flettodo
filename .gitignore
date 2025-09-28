@@ -213,3 +213,7 @@ docs/flutter*.js
 docs/python-worker.js
 docs/.last_build_id
 docs/version.json
+
+# Windows build artifacts - keep structure but exclude binaries
+bin/win/FleTodo/
+bin/win/*.exe
