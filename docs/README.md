@@ -43,7 +43,7 @@ Configure any web server (Apache, Nginx) to serve the files.
 ## File Structure
 
 ```
-release/
+docs/
 ├── index.html          # Main application file
 ├── styles.css          # Application styles
 ├── app.js             # Application logic

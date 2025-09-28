@@ -4,7 +4,7 @@ This guide explains how to deploy the FleTodo Single Page Application (SPA) that
 
 ## 📦 What's Been Built
 
-The `/release` directory contains a fully functional SPA with two implementations:
+The `/docs` directory contains a fully functional SPA with two implementations:
 
 ### 1. Standalone HTML/CSS/JavaScript Version (Recommended)
 - `index.html` - Main application entry point
@@ -23,7 +23,7 @@ The `/release` directory contains a fully functional SPA with two implementation
 
 ### Option 1: Static Web Hosting (Easiest)
 
-Upload the entire `/release` directory contents to any static hosting service:
+Upload the entire `/docs` directory contents to any static hosting service:
 
 **Popular Services:**
 - **GitHub Pages**: Push to `gh-pages` branch
@@ -36,7 +36,7 @@ Upload the entire `/release` directory contents to any static hosting service:
 **Example - GitHub Pages:**
 ```bash
 # From your repository root
-git subtree push --prefix release origin gh-pages
+git subtree push --prefix docs origin gh-pages
 ```
 
 ### Option 2: Traditional Web Server
@@ -62,13 +62,13 @@ location / {
 
 Use the included test server:
 ```bash
-cd release
+cd docs
 python3 test_server.py
 ```
 
 Or use any simple HTTP server:
 ```bash
-cd release
+cd docs
 python3 -m http.server 8080
 # Open http://localhost:8080
 ```

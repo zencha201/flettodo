@@ -12,7 +12,7 @@ def create_standalone_spa():
     """Create a standalone SPA version."""
     
     project_dir = Path(__file__).parent
-    release_dir = project_dir / "release"
+    release_dir = project_dir / "docs"
     
     print("🚀 Creating standalone FleTodo SPA...")
     
@@ -782,7 +782,7 @@ Configure any web server (Apache, Nginx) to serve the files.
 ## File Structure
 
 ```
-release/
+docs/
 ├── index.html          # Main application file
 ├── styles.css          # Application styles
 ├── app.js             # Application logic

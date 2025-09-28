@@ -15,15 +15,15 @@ def create_spa_build():
     
     # Get project directory
     project_dir = Path(__file__).parent
-    release_dir = project_dir / "release"
+    release_dir = project_dir / "docs"
     
     print("🚀 Building FleTodo SPA...")
     print(f"📁 Project directory: {project_dir}")
-    print(f"📦 Release directory: {release_dir}")
+    print(f"📦 Docs directory: {release_dir}")
     
-    # Clean existing release directory
+    # Clean existing docs directory
     if release_dir.exists():
-        print("🧹 Cleaning existing release directory...")
+        print("🧹 Cleaning existing docs directory...")
         shutil.rmtree(release_dir)
     
     # Build command with optimized settings for SPA deployment
@@ -73,7 +73,7 @@ def create_spa_build():
     return True
 
 def create_release_readme(release_dir):
-    """Create a README file for the release directory."""
+    """Create a README file for the docs directory."""
     readme_content = """# FleTodo - Single Page Application
 
 This directory contains the built Single Page Application (SPA) version of FleTodo.
@@ -129,7 +129,7 @@ Works in all modern browsers that support:
     
     readme_path = release_dir / "README.md"
     readme_path.write_text(readme_content)
-    print(f"📄 Created release README: {readme_path}")
+    print(f"📄 Created docs README: {readme_path}")
 
 def create_test_server_script(release_dir):
     """Create a simple test server script for local testing."""
@@ -185,7 +185,7 @@ def report_build_results(release_dir):
     print("\n🎉 SPA Build Complete!")
     print("=" * 50)
     
-    print(f"\n📦 Release directory: {release_dir}")
+    print(f"\n📦 Docs directory: {release_dir}")
     print(f"📊 Total files generated:")
     
     file_count = 0
