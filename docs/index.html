@@ -1,67 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FleTodo - Simple Todo List</title>
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📝%3C/text%3E%3C/svg%3E">
-    
-    <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📝%3C/text%3E%3C/svg%3E">
-    
-    <!-- Theme color -->
-    <meta name="theme-color" content="#0175C2">
-    
-    <!-- CSS -->
-    <link rel="stylesheet" href="styles.css">
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A simple and elegant todo list application built with Flet">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="FleTodo">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <!-- Flet specific -->
+  <meta name="flet-route-url-strategy" content="hash">
+  <meta name="flet-web-pyodide" content="true">
+  <meta name="flet-websocket-endpoint-path" content="/ws">
+
+  <title>FleTodo</title>
+  <link rel="manifest" href="manifest.json">
+
+  <script>
+    var webRenderer = "auto";
+    var useColorEmoji = false;
+  </script>
+
+  <script>webRenderer="html";</script>
+  <script>useColorEmoji=false;</script>
+
+  
+        <script>
+            var micropipIncludePre = false;
+            var pythonModuleName = "main";
+        </script>
+        <script src="python.js"></script>
+        
 </head>
+
 <body>
-    <div class="container">
-        <header class="app-header">
-            <h1>📝 FleTodo</h1>
-            <p class="subtitle">A simple and elegant todo list</p>
-        </header>
-        
-        <main class="main-content">
-            <!-- Add todo section -->
-            <section class="add-todo-section">
-                <div class="input-group">
-                    <input 
-                        type="text" 
-                        id="todoInput" 
-                        placeholder="Enter a new todo item..."
-                        class="todo-input"
-                        maxlength="200"
-                    >
-                    <button id="addBtn" class="add-btn">Add Todo</button>
-                </div>
-            </section>
-            
-            <hr class="divider">
-            
-            <!-- Todo list section -->
-            <section class="todo-list-section">
-                <h2>Your Todos:</h2>
-                <div id="todoList" class="todo-list">
-                    <div class="empty-state">
-                        <p>No todos yet. Add one above!</p>
-                    </div>
-                </div>
-            </section>
-        </main>
-        
-        <footer class="app-footer">
-            <p>Built with ❤️ using HTML, CSS & JavaScript</p>
-            <p class="storage-info">Data is saved in your browser's local storage</p>
-        </footer>
-    </div>
-    
-    <!-- JavaScript -->
-    <script src="app.js"></script>
+  <div id="loading">
+    <style>
+      body {
+        inset: 0;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        position: fixed;
+      }
+
+      #loading {
+        align-items: center;
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+      }
+
+      #loading img {
+        animation: 1s ease-in-out 0s infinite alternate breathe;
+        opacity: .66;
+        transition: opacity .4s;
+      }
+
+      #loading.main_done img {
+        opacity: 1;
+      }
+
+      #loading.init_done img {
+        animation: .33s ease-in-out 0s 1 forwards zooooom;
+        opacity: .05;
+      }
+
+      @keyframes breathe {
+        from {
+          transform: scale(0.4);
+          opacity: 1.0;
+        }
+
+        to {
+          transform: scale(0.35);
+          opacity: .7;
+        }
+      }
+
+      @keyframes zooooom {
+        from {
+          transform: scale(0.4)
+        }
+
+        to {
+          transform: scale(10)
+        }
+      }
+    </style>
+    <img src="icons/loading-animation.png" alt="Loading..." />
+  </div>
+  <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
