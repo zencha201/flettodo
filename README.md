@@ -50,15 +50,66 @@ The application will open in your default web browser.
 
 ## Building
 
+### Quick Build Commands
+
+The project includes a Makefile for convenient build commands:
+
+```bash
+make help       # Show all available commands
+make build      # Build the standalone SPA
+make validate   # Validate the build
+make serve      # Start local test server
+make all        # Build and validate
+```
+
 ### Web SPA Build
 
-To create a deployable Single Page Application:
+The project includes **two** build options for creating a web SPA:
+
+#### Option 1: Standalone HTML/CSS/JS (Recommended)
+
+Creates a pure HTML/CSS/JavaScript version with no external dependencies:
+
+```bash
+python create_standalone_spa.py
+# or
+make build
+```
+
+This creates a lightweight, standalone SPA in the `docs/` directory with:
+- Pure HTML/CSS/JavaScript (no Python runtime needed)
+- ~15KB total size (excluding icons)
+- Works offline with service worker
+- PWA support
+- Perfect for GitHub Pages
+
+#### Option 2: Flet-Based Build
+
+Creates a full Flet web build using Python runtime in the browser:
 
 ```bash
 python build_spa.py
 ```
 
-This creates a web version in the `docs/` directory that can be deployed to any static hosting service.
+This creates a complete Flet web version with Pyodide runtime (requires Flet installation).
+
+**Note:** The standalone version is automatically built and deployed via GitHub Actions on every push to main.
+
+### Build Validation
+
+To validate that the SPA build is complete and correct:
+
+```bash
+python validate_spa.py
+# or
+make validate
+```
+
+This checks for:
+- Required files presence
+- HTML structure validation
+- Manifest.json correctness
+- JavaScript functionality verification
 
 ### Windows Desktop Build
 
@@ -95,17 +146,29 @@ Your todos are automatically saved to your browser's localStorage and will persi
 
 ```
 flettodo/
-├── todo_app.py           # Main application with TodoApp class
-├── main.py               # Entry point script
-├── test_todo.py          # Test script for TodoItem functionality
-├── build_spa.py          # Build script for web SPA deployment
-├── build_windows.py      # Build script for Windows desktop app
-├── create_standalone_spa.py  # Standalone HTML/CSS/JS version
-├── requirements.txt      # Python dependencies
-├── bin/                  # Build output directory
-│   └── win/             # Windows build artifacts
-├── docs/                # SPA build artifacts
-└── README.md            # This file
+├── todo_app.py                    # Main application with TodoApp class
+├── main.py                        # Entry point script
+├── test_todo.py                   # Test script for TodoItem functionality
+├── build_spa.py                   # Build script for Flet web SPA
+├── build_windows.py               # Build script for Windows desktop app
+├── create_standalone_spa.py       # Standalone HTML/CSS/JS SPA builder
+├── validate_spa.py                # SPA build validation script
+├── Makefile                       # Convenient build commands
+├── requirements.txt               # Python dependencies
+├── .github/
+│   └── workflows/
+│       └── build-spa.yml         # GitHub Actions CI/CD workflow
+├── bin/                           # Build output directory
+│   └── win/                      # Windows build artifacts
+├── docs/                          # SPA build artifacts (deployed to GitHub Pages)
+│   ├── index.html                # Main HTML file
+│   ├── app.js                    # Application JavaScript
+│   ├── styles.css                # Application styles
+│   ├── manifest.json             # PWA manifest
+│   ├── sw.js                     # Service worker
+│   ├── .nojekyll                 # GitHub Pages configuration
+│   └── README.md                 # Deployment documentation
+└── README.md                      # This file
 ```
 
 ## Technical Details
@@ -146,4 +209,28 @@ MIT License - see LICENSE file for details.
 
 ## GitHub Pages
 
-This project is hosted on GitHub Pages. Access it [here](https://zencha201.github.io/flettodo/).
+This project is hosted on GitHub Pages and automatically deployed via GitHub Actions.
+
+- **Live Site**: [https://zencha201.github.io/flettodo/](https://zencha201.github.io/flettodo/)
+- **Auto-deploy**: Triggered on every push to `main` branch
+- **Build Process**: Uses `create_standalone_spa.py` to generate static files
+- **Deployment**: Files are deployed to `gh-pages` branch
+
+### Manual Deployment
+
+To manually deploy to GitHub Pages:
+
+1. Build the SPA:
+   ```bash
+   python create_standalone_spa.py
+   ```
+
+2. The `docs/` directory is ready for deployment to any static hosting service
+
+### CI/CD Pipeline
+
+The repository includes a GitHub Actions workflow (`.github/workflows/build-spa.yml`) that:
+- Automatically builds the SPA on every push
+- Runs verification checks
+- Deploys to GitHub Pages (on main branch)
+- Stores build artifacts for 30 days

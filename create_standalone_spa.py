@@ -37,6 +37,11 @@ def create_standalone_spa():
     # Create documentation
     create_docs(release_dir)
     
+    # Create .nojekyll for GitHub Pages
+    nojekyll_path = release_dir / ".nojekyll"
+    nojekyll_path.touch()
+    print(f"📄 Created .nojekyll for GitHub Pages")
+    
     print("✅ Standalone SPA created successfully!")
     print(f"📁 Location: {release_dir}")
     print("🌐 Open index.html in a web browser to test")
