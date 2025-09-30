@@ -21,25 +21,56 @@ The `/docs` directory contains a fully functional SPA with two implementations:
 
 ## 🚀 Deployment Options
 
-### Option 1: Static Web Hosting (Easiest)
+### Option 1: Automated GitHub Actions (Recommended)
+
+This repository includes a GitHub Actions workflow that automatically builds and deploys the SPA:
+
+- **Automatic**: Triggers on every push to `main` branch
+- **Validation**: Runs build validation checks
+- **Deployment**: Automatically deploys to `gh-pages` branch
+- **Artifacts**: Stores build artifacts for 30 days
+
+The workflow (`.github/workflows/build-spa.yml`) handles:
+1. Building the standalone SPA using `create_standalone_spa.py`
+2. Validating the build with `validate_spa.py`
+3. Deploying to GitHub Pages
+
+**To enable GitHub Pages:**
+1. Go to repository Settings → Pages
+2. Select `gh-pages` branch as source
+3. Click Save
+
+The site will be available at: `https://<username>.github.io/<repo-name>/`
+
+### Option 2: Manual GitHub Pages Deployment
+
+For manual deployment:
+
+```bash
+# Build the SPA
+make build
+# or
+python create_standalone_spa.py
+
+# Validate the build
+make validate
+
+# Push to gh-pages branch
+git subtree push --prefix docs origin gh-pages
+```
+
+### Option 3: Static Web Hosting
 
 Upload the entire `/docs` directory contents to any static hosting service:
 
 **Popular Services:**
-- **GitHub Pages**: Push to `gh-pages` branch
 - **Netlify**: Drag & drop the folder or connect Git
 - **Vercel**: Deploy with Git integration
 - **Firebase Hosting**: Use `firebase deploy`
 - **Amazon S3 + CloudFront**: Static website hosting
 - **Azure Static Web Apps**: Git-based deployment
 
-**Example - GitHub Pages:**
-```bash
-# From your repository root
-git subtree push --prefix docs origin gh-pages
-```
-
-### Option 2: Traditional Web Server
+### Option 4: Traditional Web Server
 
 Configure any web server to serve the static files:
 
@@ -58,7 +89,7 @@ location / {
 }
 ```
 
-### Option 3: Local Testing
+### Option 5: Local Testing
 
 Use the included test server:
 ```bash

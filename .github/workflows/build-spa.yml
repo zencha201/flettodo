@@ -31,17 +31,9 @@ jobs:
       run: |
         python3 create_standalone_spa.py
     
-    - name: Verify build output
+    - name: Validate build output
       run: |
-        echo "📦 Build artifacts:"
-        ls -lh docs/
-        echo ""
-        echo "✅ Verifying critical files exist:"
-        test -f docs/index.html && echo "  ✓ index.html"
-        test -f docs/app.js && echo "  ✓ app.js"
-        test -f docs/styles.css && echo "  ✓ styles.css"
-        test -f docs/manifest.json && echo "  ✓ manifest.json"
-        test -f docs/sw.js && echo "  ✓ sw.js"
+        python3 validate_spa.py
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
