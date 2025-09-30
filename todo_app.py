@@ -8,12 +8,14 @@ A single-page application (SPA) for managing todo items with the following featu
 - Delete todo items
 - Data persistence using browser localStorage
 - Dynamic UI updates
+- Export/Import todos to/from JSON files
 """
 
 import flet as ft
 import json
 from datetime import datetime
 from typing import List, Dict, Any
+import os
 
 
 class TodoItem:
@@ -74,6 +76,23 @@ class TodoApp:
             scroll=ft.ScrollMode.AUTO
         )
         
+        # Status message text
+        self.status_message = ft.Text(
+            value="",
+            size=14,
+            color=ft.colors.GREEN_700,
+            text_align=ft.TextAlign.CENTER
+        )
+        
+        # FilePicker for import/export
+        self.file_picker = ft.FilePicker(
+            on_result=self.file_picker_result
+        )
+        self.page.overlay.append(self.file_picker)
+        
+        # Track current file operation
+        self.current_operation = None
+        
         # Load existing todos from localStorage
         self.load_todos()
         
@@ -88,6 +107,27 @@ class TodoApp:
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN
         )
         
+        # Import/Export buttons at the bottom
+        export_button = ft.ElevatedButton(
+            text="📥 Export to JSON",
+            icon=ft.icons.DOWNLOAD,
+            on_click=self.export_todos_dialog,
+            tooltip="Export todos to a JSON file"
+        )
+        
+        import_button = ft.ElevatedButton(
+            text="📤 Import from JSON",
+            icon=ft.icons.UPLOAD,
+            on_click=self.import_todos_dialog,
+            tooltip="Import todos from a JSON file"
+        )
+        
+        button_row = ft.Row(
+            [export_button, import_button],
+            alignment=ft.MainAxisAlignment.CENTER,
+            spacing=10
+        )
+        
         # Main container
         main_container = ft.Container(
             content=ft.Column([
@@ -96,7 +136,10 @@ class TodoApp:
                 input_row,
                 ft.Divider(),
                 ft.Text("Your Todos:", size=18, weight=ft.FontWeight.W_500),
-                self.todo_list
+                self.todo_list,
+                ft.Divider(),
+                button_row,
+                self.status_message
             ]),
             padding=20
         )
@@ -227,6 +270,113 @@ class TodoApp:
         except Exception as e:
             print(f"Error loading todos: {e}")
             self.todos = []
+    
+    def export_todos_dialog(self, e=None):
+        """Open file picker dialog to export todos to JSON."""
+        self.current_operation = "export"
+        self.file_picker.save_file(
+            dialog_title="Export Todos to JSON",
+            file_name="todos.json",
+            allowed_extensions=["json"],
+            file_type=ft.FilePickerFileType.CUSTOM
+        )
+    
+    def import_todos_dialog(self, e=None):
+        """Open file picker dialog to import todos from JSON."""
+        self.current_operation = "import"
+        self.file_picker.pick_files(
+            dialog_title="Import Todos from JSON",
+            allowed_extensions=["json"],
+            file_type=ft.FilePickerFileType.CUSTOM,
+            allow_multiple=False
+        )
+    
+    def file_picker_result(self, e: ft.FilePickerResultEvent):
+        """Handle file picker result for both import and export."""
+        if self.current_operation == "export":
+            self.export_todos_to_file(e)
+        elif self.current_operation == "import":
+            self.import_todos_from_file(e)
+        self.current_operation = None
+    
+    def export_todos_to_file(self, e: ft.FilePickerResultEvent):
+        """Export todos to a JSON file."""
+        try:
+            if e.path:
+                # Prepare todos data
+                todos_data = [todo.to_dict() for todo in self.todos]
+                json_content = json.dumps(todos_data, indent=2, ensure_ascii=False)
+                
+                # Write to file
+                with open(e.path, 'w', encoding='utf-8') as f:
+                    f.write(json_content)
+                
+                self.show_status_message(
+                    f"✅ Exported {len(self.todos)} todos to {os.path.basename(e.path)}",
+                    ft.colors.GREEN_700
+                )
+            else:
+                self.show_status_message("Export cancelled", ft.colors.GREY_600)
+        except Exception as ex:
+            self.show_status_message(f"❌ Error exporting: {str(ex)}", ft.colors.RED_700)
+    
+    def import_todos_from_file(self, e: ft.FilePickerResultEvent):
+        """Import todos from a JSON file."""
+        try:
+            if e.files and len(e.files) > 0:
+                file_path = e.files[0].path
+                
+                # Read from file
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    json_content = f.read()
+                
+                # Parse JSON
+                todos_data = json.loads(json_content)
+                
+                # Validate data structure
+                if not isinstance(todos_data, list):
+                    raise ValueError("Invalid JSON format: expected a list of todos")
+                
+                # Import todos
+                imported_todos = [TodoItem.from_dict(data) for data in todos_data]
+                self.todos = imported_todos
+                
+                # Save to localStorage
+                self.save_todos()
+                
+                # Update UI
+                self.update_todo_list()
+                self.page.update()
+                
+                self.show_status_message(
+                    f"✅ Imported {len(imported_todos)} todos from {os.path.basename(file_path)}",
+                    ft.colors.GREEN_700
+                )
+            else:
+                self.show_status_message("Import cancelled", ft.colors.GREY_600)
+        except json.JSONDecodeError as ex:
+            self.show_status_message(f"❌ Invalid JSON file: {str(ex)}", ft.colors.RED_700)
+        except Exception as ex:
+            self.show_status_message(f"❌ Error importing: {str(ex)}", ft.colors.RED_700)
+    
+    def show_status_message(self, message: str, color=None):
+        """Display a status message to the user."""
+        if color is None:
+            color = ft.colors.GREEN_700
+        self.status_message.value = message
+        self.status_message.color = color
+        self.page.update()
+        
+        # Clear message after 5 seconds
+        import threading
+        def clear_message():
+            import time
+            time.sleep(5)
+            self.status_message.value = ""
+            self.page.update()
+        
+        thread = threading.Thread(target=clear_message, daemon=True)
+        thread.start()
 
 
 def main(page: ft.Page):
