@@ -143,3 +143,7 @@ python test_todo.py
 ## License
 
 MIT License - see LICENSE file for details.
+
+## GitHub Pages
+
+This project is hosted on GitHub Pages. Access it [here](https://zencha201.github.io/flettodo/).
