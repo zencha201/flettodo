@@ -1,0 +1,62 @@
+name: Build and Deploy SPA
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    
+    - name: Build standalone SPA
+      run: |
+        python3 create_standalone_spa.py
+    
+    - name: Verify build output
+      run: |
+        echo "📦 Build artifacts:"
+        ls -lh docs/
+        echo ""
+        echo "✅ Verifying critical files exist:"
+        test -f docs/index.html && echo "  ✓ index.html"
+        test -f docs/app.js && echo "  ✓ app.js"
+        test -f docs/styles.css && echo "  ✓ styles.css"
+        test -f docs/manifest.json && echo "  ✓ manifest.json"
+        test -f docs/sw.js && echo "  ✓ sw.js"
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: spa-build
+        path: docs/
+        retention-days: 30
+    
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs
+        publish_branch: gh-pages
+        force_orphan: true
+        user_name: 'github-actions[bot]'
+        user_email: 'github-actions[bot]@users.noreply.github.com'

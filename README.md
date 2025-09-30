@@ -52,13 +52,34 @@ The application will open in your default web browser.
 
 ### Web SPA Build
 
-To create a deployable Single Page Application:
+The project includes **two** build options for creating a web SPA:
+
+#### Option 1: Standalone HTML/CSS/JS (Recommended)
+
+Creates a pure HTML/CSS/JavaScript version with no external dependencies:
+
+```bash
+python create_standalone_spa.py
+```
+
+This creates a lightweight, standalone SPA in the `docs/` directory with:
+- Pure HTML/CSS/JavaScript (no Python runtime needed)
+- ~15KB total size (excluding icons)
+- Works offline with service worker
+- PWA support
+- Perfect for GitHub Pages
+
+#### Option 2: Flet-Based Build
+
+Creates a full Flet web build using Python runtime in the browser:
 
 ```bash
 python build_spa.py
 ```
 
-This creates a web version in the `docs/` directory that can be deployed to any static hosting service.
+This creates a complete Flet web version with Pyodide runtime (requires Flet installation).
+
+**Note:** The standalone version is automatically built and deployed via GitHub Actions on every push to main.
 
 ### Windows Desktop Build
 
@@ -146,4 +167,28 @@ MIT License - see LICENSE file for details.
 
 ## GitHub Pages
 
-This project is hosted on GitHub Pages. Access it [here](https://zencha201.github.io/flettodo/).
+This project is hosted on GitHub Pages and automatically deployed via GitHub Actions.
+
+- **Live Site**: [https://zencha201.github.io/flettodo/](https://zencha201.github.io/flettodo/)
+- **Auto-deploy**: Triggered on every push to `main` branch
+- **Build Process**: Uses `create_standalone_spa.py` to generate static files
+- **Deployment**: Files are deployed to `gh-pages` branch
+
+### Manual Deployment
+
+To manually deploy to GitHub Pages:
+
+1. Build the SPA:
+   ```bash
+   python create_standalone_spa.py
+   ```
+
+2. The `docs/` directory is ready for deployment to any static hosting service
+
+### CI/CD Pipeline
+
+The repository includes a GitHub Actions workflow (`.github/workflows/build-spa.yml`) that:
+- Automatically builds the SPA on every push
+- Runs verification checks
+- Deploys to GitHub Pages (on main branch)
+- Stores build artifacts for 30 days
